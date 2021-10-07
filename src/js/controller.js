@@ -10,10 +10,6 @@ import { MODAL_CLOSE_SEC } from './config.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-// if (module.hot) {
-//   module.hot.accept();
-// }
-
 const controlRecipes = async function () {
   try {
     const id = window.location.hash.slice(1); //To remove # in start
@@ -67,10 +63,10 @@ const controlPagination = function (goToPage) {
 };
 
 const controlServings = function (newServings) {
-  //Update the recipe servings (in state)
+  // 1. Update the recipe servings (in state)
   model.updateServings(newServings);
 
-  //update the recipe view
+  // 2. Update the recipe view
   recipeView.update(model.state.recipe);
 };
 
@@ -82,7 +78,7 @@ const controlAddBookmark = function () {
   // 2. Update recipe view
   recipeView.update(model.state.recipe);
 
-  //3. Render bookmarks
+  // 3. Render bookmarks
   bookmarksView.render(model.state.bookmarks);
 };
 
@@ -100,10 +96,17 @@ const controlAddRecipe = async function (newRecipe) {
     console.log(model.state.recipe);
 
     // 2. Render recipe
+    console.log(model.state.recipe);
     recipeView.render(model.state.recipe);
 
     // 3. Success message
     addRecipeView.renderSuccess();
+
+    // Render the bookmark view
+    bookmarksView.render(model.state.bookmarks);
+
+    // Change id in url
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
 
     // 3. Close form window
     setTimeout(function () {
